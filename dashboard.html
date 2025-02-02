@@ -8,47 +8,66 @@
 </head>
 <body class="bg-gray-100">
 
+<!-- Redirect if user is not logged in -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const username = sessionStorage.getItem("username");
+        const company = sessionStorage.getItem("company");
+
+        if (!username || !company) {
+            window.location.href = "index.html"; // Redirect to login page
+        } else {
+            document.getElementById("company-name").innerText = "WIN BORN HOLDING";
+            document.getElementById("company-label").innerText = company;
+            document.getElementById("user-name").innerText = username;
+        }
+    });
+
+    function logout() {
+        sessionStorage.clear();
+        window.location.href = "index.html"; // Redirect to login
+    }
+</script>
+
 <!-- Top Navigation Bar -->
 <header class="bg-gradient-to-r from-blue-500 to-teal-400 text-white p-4 flex justify-between items-center shadow-md">
-  <!-- Left: Logo & Company Info -->
   <div class="flex items-center gap-3">
       <img src="https://via.placeholder.com/40" alt="Company Logo" class="rounded-full">
       <div>
-          <h2 id="company-name" class="text-lg font-bold">WIN BORN HOLDING</h2>
-          <p class="text-sm opacity-90">Company : company_name</p>
+          <h2 class="text-lg font-bold">WIN BORN HOLDING</h2>
+          <p class="text-sm opacity-90">Company: <span id="company-label">Loading...</span></p>
       </div>
   </div>
 
-  <!-- Right: Icons, Language Switch & User Profile -->
   <div class="flex items-center gap-6">
       <button class="text-white opacity-90 hover:opacity-100"><i class="fas fa-bell"></i></button>
       <button class="text-white opacity-90 hover:opacity-100"><i class="fas fa-th"></i></button>
 
-      <!-- Language Switch Button -->
       <button onclick="toggleLanguage()" class="px-3 py-1 bg-white text-gray-800 font-semibold rounded-md shadow-md">
           <span id="lang-btn">🇺🇸 EN</span>
       </button>
 
-      <!-- User Profile (Only One) -->
       <div class="flex items-center gap-2 cursor-pointer">
           <img src="https://via.placeholder.com/35" class="rounded-full" alt="User">
-          <span id="user-name">Ratchanont</span>
+          <span id="user-name">Loading...</span>
       </div>
+
+      <button onclick="logout()" class="px-3 py-1 bg-red-500 text-white font-semibold rounded-md shadow-md">Logout</button>
   </div>
 </header>
 
 <!-- Navigation Menu -->
 <nav class="bg-white shadow-md p-3 flex justify-center">
   <ul class="flex space-x-4 text-gray-700 font-medium">
-      <li><a href="#" id="menu-dashboard" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>🏠</span> Dashboard</a></li>
-      <li><a href="#" id="menu-revenue" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>📈</span> Revenue</a></li>
-      <li><a href="#" id="menu-expenses" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>💸</span> Expenses</a></li>
-      <li><a href="#" id="menu-contacts" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>👇</span> Contacts</a></li>
-      <li><a href="#" id="menu-products" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>🛋</span> Products</a></li>
-      <li><a href="#" id="menu-finances" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>💰</span> Finances</a></li>
-      <li><a href="#" id="menu-accounts" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>🏦</span> Accounts</a></li>
-      <li><a href="#" id="menu-filevault" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>📂</span> File Vault</a></li>
-      <li><a href="#" id="menu-settings" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>⚙</span> Settings</a></li>
+      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">🏠 Dashboard</a></li>
+      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">📈 Revenue</a></li>
+      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">💸 Expenses</a></li>
+      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">📇 Contacts</a></li>
+      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">📦 Products</a></li>
+      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">💰 Finances</a></li>
+      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">🏦 Accounts</a></li>
+      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">📂 File Vault</a></li>
+      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">⚙ Settings</a></li>
   </ul>
 </nav>
 
@@ -70,7 +89,7 @@
             accounts: "Accounts",
             fileVault: "File Vault",
             settings: "Settings",
-            userName: "Ratchanont"
+            userName: "User"
         },
         th: {
             companyName: "วิน บอร์น โฮลดิ้ง",
@@ -83,7 +102,7 @@
             accounts: "บัญชี",
             fileVault: "คลังไฟล์",
             settings: "ตั้งค่า",
-            userName: "รัชนนท์"
+            userName: "ผู้ใช้"
         }
     };
 
@@ -93,7 +112,6 @@
         currentLang = currentLang === "en" ? "th" : "en";
 
         document.getElementById("lang-btn").innerText = currentLang === "en" ? "🇺🇸 EN" : "🇹🇭 TH";
-        document.getElementById("company-name").innerText = translations[currentLang].companyName;
         document.getElementById("menu-dashboard").innerText = "🏠 " + translations[currentLang].dashboard;
         document.getElementById("menu-revenue").innerText = "📈 " + translations[currentLang].revenue;
         document.getElementById("menu-expenses").innerText = "💸 " + translations[currentLang].expenses;

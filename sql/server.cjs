@@ -18,33 +18,25 @@ app.post('/api/login', (req, res) => {
         }
 
         if (results.length === 0) {
-            return res.status(401).json({ success: false, message: 'User not found' });
+            return res.status(401).json({ success: false, message: 'Invalid credentials' });
         }
 
         const user = results[0];
 
         bcrypt.compare(password, user.password, (err, isMatch) => {
             if (err) {
-                return res.status(500).json({ success: false, message: 'Error comparing passwords' });
+                return res.status(500).json({ success: false, message: 'Error verifying password' });
             }
 
             if (!isMatch) {
                 return res.status(401).json({ success: false, message: 'Incorrect password' });
             }
 
-            res.json({
-                success: true,
-                message: 'Login successful',
-                user: {
-                    username: user.username,
-                    role: user.role,
-                    company: user.company,
-                },
-            });
+            res.json({ success: true, message: 'Login successful', user });
         });
     });
 });
 
 app.listen(3000, () => {
-    console.log('✅ Server running on port 3000');
+    console.log('✅ Server running on http://localhost:3000');
 });
