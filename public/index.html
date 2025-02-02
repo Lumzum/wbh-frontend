@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WBH Accounting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<!-- Top Navigation Bar -->
+<header class="bg-gradient-to-r from-blue-500 to-teal-400 text-white p-4 flex justify-between items-center shadow-md">
+  <!-- Left: Logo & Company Info -->
+  <div class="flex items-center gap-3">
+      <img src="https://via.placeholder.com/40" alt="Company Logo" class="rounded-full">
+      <div>
+          <h2 id="company-name" class="text-lg font-bold">WIN BORN HOLDING</h2>
+          <p class="text-sm opacity-90">Company : company_name</p>
+      </div>
+  </div>
+
+  <!-- Right: Icons, Language Switch & User Profile -->
+  <div class="flex items-center gap-6">
+      <button class="text-white opacity-90 hover:opacity-100"><i class="fas fa-bell"></i></button>
+      <button class="text-white opacity-90 hover:opacity-100"><i class="fas fa-th"></i></button>
+
+      <!-- Language Switch Button -->
+      <button onclick="toggleLanguage()" class="px-3 py-1 bg-white text-gray-800 font-semibold rounded-md shadow-md">
+          <span id="lang-btn">🇺🇸 EN</span>
+      </button>
+
+      <!-- User Profile (Only One) -->
+      <div class="flex items-center gap-2 cursor-pointer">
+          <img src="https://via.placeholder.com/35" class="rounded-full" alt="User">
+          <span id="user-name">Ratchanont</span>
+      </div>
+  </div>
+</header>
+
+<!-- Navigation Menu -->
+<nav class="bg-white shadow-md p-3 flex justify-center">
+  <ul class="flex space-x-4 text-gray-700 font-medium">
+      <li><a href="#" id="menu-dashboard" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>🏠</span> Dashboard</a></li>
+      <li><a href="#" id="menu-revenue" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>📈</span> Revenue</a></li>
+      <li><a href="#" id="menu-expenses" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>💸</span> Expenses</a></li>
+      <li><a href="#" id="menu-contacts" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>👇</span> Contacts</a></li>
+      <li><a href="#" id="menu-products" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>🛋</span> Products</a></li>
+      <li><a href="#" id="menu-finances" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>💰</span> Finances</a></li>
+      <li><a href="#" id="menu-accounts" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>🏦</span> Accounts</a></li>
+      <li><a href="#" id="menu-filevault" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>📂</span> File Vault</a></li>
+      <li><a href="#" id="menu-settings" class="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-100 hover:bg-blue-500 hover:text-white transition"><span>⚙</span> Settings</a></li>
+  </ul>
+</nav>
+
+<!-- Content Section -->
+<main class="p-6">
+    <h1 class="text-2xl font-bold text-gray-800">Overview</h1>
+</main>
+
+<script>
+    const translations = {
+        en: {
+            companyName: "WIN BORN HOLDING",
+            dashboard: "Dashboard",
+            revenue: "Revenue",
+            expenses: "Expenses",
+            contacts: "Contacts",
+            products: "Products",
+            finances: "Finances",
+            accounts: "Accounts",
+            fileVault: "File Vault",
+            settings: "Settings",
+            userName: "Ratchanont"
+        },
+        th: {
+            companyName: "วิน บอร์น โฮลดิ้ง",
+            dashboard: "แดชบอร์ด",
+            revenue: "รายได้",
+            expenses: "ค่าใช้จ่าย",
+            contacts: "ผู้ติดต่อ",
+            products: "สินค้า",
+            finances: "การเงิน",
+            accounts: "บัญชี",
+            fileVault: "คลังไฟล์",
+            settings: "ตั้งค่า",
+            userName: "รัชนนท์"
+        }
+    };
+
+    let currentLang = "en";
+
+    function toggleLanguage() {
+        currentLang = currentLang === "en" ? "th" : "en";
+
+        document.getElementById("lang-btn").innerText = currentLang === "en" ? "🇺🇸 EN" : "🇹🇭 TH";
+        document.getElementById("company-name").innerText = translations[currentLang].companyName;
+        document.getElementById("menu-dashboard").innerText = "🏠 " + translations[currentLang].dashboard;
+        document.getElementById("menu-revenue").innerText = "📈 " + translations[currentLang].revenue;
+        document.getElementById("menu-expenses").innerText = "💸 " + translations[currentLang].expenses;
+        document.getElementById("menu-contacts").innerText = "📇 " + translations[currentLang].contacts;
+        document.getElementById("menu-products").innerText = "📦 " + translations[currentLang].products;
+        document.getElementById("menu-finances").innerText = "💰 " + translations[currentLang].finances;
+        document.getElementById("menu-accounts").innerText = "🏦 " + translations[currentLang].accounts;
+        document.getElementById("menu-filevault").innerText = "📂 " + translations[currentLang].fileVault;
+        document.getElementById("menu-settings").innerText = "⚙ " + translations[currentLang].settings;
+        document.getElementById("user-name").innerText = translations[currentLang].userName;
+    }
+</script>
+
+</body>
+</html>
