@@ -4,7 +4,8 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '2024WBHSql@',
-    database: 'wbh_database'
+    database: 'wbh_database',
+    port: 3306 // ✅ Add MySQL default port
 });
 
 db.connect((err) => {
