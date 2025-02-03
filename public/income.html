@@ -1,0 +1,84 @@
+<!-- Updated Income and Expenses Pages with Department Dropdown -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income & Expenses</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Income & Expenses</h1>
+        
+        <!-- Department Filter -->
+        <label for="departmentFilter">Filter by Department:</label>
+        <select id="departmentFilter">
+            <option value="all">All Departments</option>
+            <option value="Sales">Sales</option>
+            <option value="Finance">Finance</option>
+            <option value="Operations">Operations</option>
+        </select>
+        
+        <!-- Income Section -->
+        <section>
+            <h2>Income</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Quotation ID</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="incomeTable">
+                    <!-- Data will be loaded dynamically -->
+                </tbody>
+            </table>
+        </section>
+        
+        <!-- Expenses Section -->
+        <section>
+            <h2>Expenses</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Expense ID</th>
+                        <th>Vendor</th>
+                        <th>Amount</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="expensesTable">
+                    <!-- Data will be loaded dynamically -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script>
+        document.getElementById('departmentFilter').addEventListener('change', function() {
+            let selectedDepartment = this.value;
+            filterTables(selectedDepartment);
+        });
+        
+        function filterTables(department) {
+            let incomeRows = document.querySelectorAll('#incomeTable tr');
+            let expenseRows = document.querySelectorAll('#expensesTable tr');
+            
+            incomeRows.forEach(row => {
+                let dept = row.getAttribute('data-department');
+                row.style.display = (department === 'all' || dept === department) ? '' : 'none';
+            });
+            
+            expenseRows.forEach(row => {
+                let dept = row.getAttribute('data-department');
+                row.style.display = (department === 'all' || dept === department) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

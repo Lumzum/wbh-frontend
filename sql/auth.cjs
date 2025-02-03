@@ -1,37 +1,37 @@
 const bcrypt = require('bcrypt');
-const db = require('./db.cjs'); // Import database connection
+const db = require('./db.cjs');
 
-function loginUser(inputUsername, inputPassword) {
+function loginUser(inputUsername, inputPassword, callback) {
     const sql = 'SELECT * FROM users WHERE username = ?';
-    
+
     db.query(sql, [inputUsername], (error, results) => {
         if (error) {
             console.error('❌ Error fetching user:', error);
+            callback(error, null);
             return;
         }
-        
+
         if (results.length === 0) {
-            console.log('❌ User not found');
+            callback(null, { success: false, message: 'User not found' });
             return;
         }
 
         const user = results[0];
 
-        // Compare entered password with hashed password
         bcrypt.compare(inputPassword, user.password, (err, isMatch) => {
             if (err) {
                 console.error('❌ Error comparing passwords:', err);
+                callback(err, null);
                 return;
             }
 
             if (isMatch) {
-                console.log('✅ Login successful for:', user.username);
+                callback(null, { success: true, user: { username: user.username, role: user.role, company: user.company } });
             } else {
-                console.log('❌ Incorrect password');
+                callback(null, { success: false, message: 'Incorrect password' });
             }
         });
     });
 }
 
-// Export function to use in other files
 module.exports = { loginUser };
