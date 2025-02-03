@@ -1,14 +1,16 @@
+require('dotenv').config();
 const db = require('./db.cjs');
 const bcrypt = require('bcrypt');
+const readline = require('readline');
 const { loginUser } = require('./auth.cjs');
 
-// User details
-const username = 'lumzum@winbornholding.com';
-const plainPassword = '2024WBHLumzum@';
-const role = 'admin';
-const company = 'ALL ACCESS';
-
 const saltRounds = 10;
+
+// Create an interface for user input
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
 // Function to check if the user already exists
 const checkUserExists = async (username) => {
@@ -25,7 +27,7 @@ const checkUserExists = async (username) => {
 };
 
 // Function to insert a new user if they don't exist
-const insertUser = async () => {
+const insertUser = async (username, plainPassword, role, company) => {
     try {
         const userExists = await checkUserExists(username);
 
@@ -47,6 +49,8 @@ const insertUser = async () => {
                 console.log('\n🔹 Testing Login:');
                 loginUser(username, plainPassword); // ✅ Should log in successfully
                 loginUser(username, 'wrongpassword'); // ❌ Should fail
+
+                rl.close();
             });
         }
     } catch (error) {
@@ -54,7 +58,13 @@ const insertUser = async () => {
     }
 };
 
-// Execute the function
-insertUser();
-
-module.exports = { insertUser };
+// Prompt user for input
+rl.question('Enter username (email): ', (username) => {
+    rl.question('Enter password: ', (plainPassword) => {
+        rl.question('Enter role (admin/user): ', (role) => {
+            rl.question('Enter company name: ', (company) => {
+                insertUser(username, plainPassword, role, company);
+            });
+        });
+    });
+});
