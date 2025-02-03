@@ -6,28 +6,43 @@ const fs = require('fs-extra');
 const fileUpload = require('express-fileupload');
 const db = require('./db.cjs'); // MySQL Database connection
 const bcrypt = require('bcrypt');
+const session = require('express-session');
 
 const app = express();
 
 // ✅ CORS Configuration
 const corsOptions = {
-    origin: ['https://lumzum.github.io', 'http://localhost:3000'], // Add all allowed origins
+    origin: ['https://lumzum.github.io', 'http://localhost:3000'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization']
 };
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
-app.use(fileUpload()); // Enable file uploads
-
-// ✅ Serve static files
+app.use(fileUpload());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ✅ Ensure 'uploads/' and 'recycle_bin/' directories exist
+// ✅ Session Configuration
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
+
+// ✅ Ensure directories exist
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const RECYCLE_BIN = path.join(__dirname, 'recycle_bin');
 fs.ensureDirSync(UPLOADS_DIR);
 fs.ensureDirSync(RECYCLE_BIN);
+
+// ✅ Authentication Middleware
+function authenticateUser(req, res, next) {
+    if (!req.session.username) {
+        return res.status(401).json({ success: false, message: 'Unauthorized: Please log in' });
+    }
+    next();
+}
 
 // ✅ Login API
 app.post('/api/login', (req, res) => {
@@ -39,122 +54,78 @@ app.post('/api/login', (req, res) => {
 
     const sql = 'SELECT * FROM users WHERE username = ? AND company = ?';
     db.query(sql, [username, company], (error, results) => {
-        if (error) {
-            console.error("❌ Database error:", error);
-            return res.status(500).json({ success: false, message: 'Database error' });
-        }
-
-        if (results.length === 0) {
-            return res.status(401).json({ success: false, message: 'User not found or incorrect company' });
-        }
+        if (error) return res.status(500).json({ success: false, message: 'Database error' });
+        if (results.length === 0) return res.status(401).json({ success: false, message: 'Invalid credentials' });
 
         const user = results[0];
-
         bcrypt.compare(password, user.password, (err, isMatch) => {
-            if (err) {
-                return res.status(500).json({ success: false, message: 'Error comparing passwords' });
-            }
+            if (err) return res.status(500).json({ success: false, message: 'Error comparing passwords' });
+            if (!isMatch) return res.status(401).json({ success: false, message: 'Incorrect password' });
 
-            if (!isMatch) {
-                return res.status(401).json({ success: false, message: 'Incorrect password' });
-            }
-
-            res.json({
-                success: true,
-                message: 'Login successful',
-                user: {
-                    username: user.username,
-                    role: user.role,
-                    company: user.company,
-                },
-            });
+            req.session.username = user.username;
+            req.session.company = user.company;
+            res.json({ success: true, message: 'Login successful', user: { username: user.username, role: user.role, company: user.company } });
         });
     });
 });
 
-// ✅ Upload File API (Used for Quotations, Invoices, Payments)
-app.post('/api/upload', (req, res) => {
+// ✅ Logout API
+app.post('/api/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.json({ success: true, message: 'Logged out successfully' });
+    });
+});
+
+// ✅ Secure Data Routes
+app.get('/api/income', authenticateUser, (req, res) => {
+    db.query('SELECT * FROM income WHERE company = ?', [req.session.company], (err, results) => {
+        if (err) return res.status(500).json({ success: false, message: 'Database query failed' });
+        res.json(results);
+    });
+});
+
+// ✅ Upload File API
+app.post('/api/upload', authenticateUser, (req, res) => {
     if (!req.files || !req.files.file) {
         return res.status(400).json({ success: false, message: 'No file uploaded' });
     }
-
     const file = req.files.file;
     const filePath = path.join(UPLOADS_DIR, file.name);
-
     file.mv(filePath, (err) => {
-        if (err) {
-            console.error('❌ File Upload Error:', err);
-            return res.status(500).json({ success: false, message: 'File upload failed' });
-        }
-
+        if (err) return res.status(500).json({ success: false, message: 'File upload failed' });
         res.json({ success: true, message: 'File uploaded successfully', filePath });
     });
 });
 
-// ✅ Delete File API (Moves file to recycle bin)
-app.post('/api/delete-file', (req, res) => {
+// ✅ Delete File API
+app.post('/api/delete-file', authenticateUser, (req, res) => {
     const { filename } = req.body;
     const filePath = path.join(UPLOADS_DIR, filename);
     const recyclePath = path.join(RECYCLE_BIN, filename);
-
-    if (!fs.existsSync(filePath)) {
-        return res.status(404).json({ success: false, message: 'File not found' });
-    }
-
+    if (!fs.existsSync(filePath)) return res.status(404).json({ success: false, message: 'File not found' });
     fs.move(filePath, recyclePath, (err) => {
-        if (err) {
-            console.error('❌ Error moving file to recycle bin:', err);
-            return res.status(500).json({ success: false, message: 'Failed to delete file' });
-        }
-
+        if (err) return res.status(500).json({ success: false, message: 'Failed to delete file' });
         res.json({ success: true, message: 'File moved to recycle bin' });
     });
 });
 
-// ✅ Restore File from Recycle Bin
-app.post('/api/restore-file', (req, res) => {
-    const { filename } = req.body;
-    const recyclePath = path.join(RECYCLE_BIN, filename);
-    const filePath = path.join(UPLOADS_DIR, filename);
-
-    if (!fs.existsSync(recyclePath)) {
-        return res.status(404).json({ success: false, message: 'File not found in recycle bin' });
-    }
-
-    fs.move(recyclePath, filePath, (err) => {
-        if (err) {
-            console.error('❌ Error restoring file:', err);
-            return res.status(500).json({ success: false, message: 'Failed to restore file' });
-        }
-
-        res.json({ success: true, message: 'File restored successfully' });
-    });
-});
-
-// ✅ Automatically delete files in Recycle Bin older than 30 days
+// ✅ Auto Delete Old Files in Recycle Bin
 setInterval(() => {
     fs.readdir(RECYCLE_BIN, (err, files) => {
-        if (err) return console.error('❌ Error reading recycle bin:', err);
-
+        if (err) return;
         files.forEach((file) => {
             const filePath = path.join(RECYCLE_BIN, file);
             fs.stat(filePath, (err, stats) => {
-                if (err) return console.error('❌ Error reading file stats:', err);
-
-                const now = new Date().getTime();
+                if (err) return;
+                const now = Date.now();
                 const lastModified = new Date(stats.mtime).getTime();
-                const daysOld = (now - lastModified) / (1000 * 60 * 60 * 24);
-
-                if (daysOld > 30) {
-                    fs.unlink(filePath, (err) => {
-                        if (err) console.error('❌ Error deleting old file:', err);
-                        else console.log(`🗑️ Deleted old file: ${file}`);
-                    });
+                if ((now - lastModified) / (1000 * 60 * 60 * 24) > 30) {
+                    fs.unlink(filePath, () => {});
                 }
             });
         });
     });
-}, 86400000); // Runs every 24 hours
+}, 86400000);
 
 // ✅ Start Server
 const PORT = 3000;
