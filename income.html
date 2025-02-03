@@ -8,16 +8,21 @@
 </head>
 <body class="bg-gray-100">
 
+<!-- Navbar & Header -->
+<script src="navbar.js"></script>
+
 <!-- Header -->
 <header class="bg-gradient-to-r from-blue-500 to-teal-400 text-white p-4 flex justify-between items-center shadow-md">
-    <h2 class="text-lg font-bold">Income</h2>
-    <button onclick="createDocument()" class="text-white text-3xl font-bold bg-blue-500 hover:bg-blue-600 rounded-full w-10 h-10 flex items-center justify-center">+</button>
+    <div class="flex flex-col">
+        <h1 class="text-3xl font-bold">Income</h1>
+        <label for="departmentFilter" class="text-gray-100 text-lg mt-1">Select Department:</label>
+    </div>
+    <button onclick="openQuotationModal()" class="text-white text-3xl font-bold bg-blue-500 hover:bg-blue-600 rounded-full w-12 h-12 flex items-center justify-center fixed bottom-10 right-10 shadow-lg">+</button>
 </header>
 
 <!-- Filters -->
 <div class="p-4 bg-white shadow-md rounded-md flex flex-wrap gap-4 items-center">
     <div>
-        <label for="departmentFilter" class="block text-gray-700 font-semibold">Select Department:</label>
         <select id="departmentFilter" class="mt-1 p-2 w-48 border rounded-md">
             <option value="all">All Departments</option>
         </select>
@@ -61,6 +66,21 @@
     </table>
 </div>
 
+<!-- Quotation Modal -->
+<div id="quotationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+        <h2 class="text-xl font-bold mb-4">Create Quotation</h2>
+        <label class="block mb-2">Customer Name:</label>
+        <input type="text" id="customerName" class="w-full p-2 border rounded-md mb-4">
+        <label class="block mb-2">Amount:</label>
+        <input type="number" id="quotationAmount" class="w-full p-2 border rounded-md mb-4">
+        <div class="flex justify-end gap-2">
+            <button onclick="closeQuotationModal()" class="px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
+            <button onclick="saveQuotation()" class="px-4 py-2 bg-blue-500 text-white rounded-md">Save</button>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         fetchDepartments();
@@ -82,32 +102,21 @@
             .catch(error => console.error('Error fetching departments:', error));
     }
 
-    document.getElementById('departmentFilter').addEventListener('change', applyFilters);
-    document.getElementById('typeFilter').addEventListener('change', applyFilters);
-    document.getElementById('statusFilter').addEventListener('change', applyFilters);
-
-    function applyFilters() {
-        let department = document.getElementById('departmentFilter').value;
-        let type = document.getElementById('typeFilter').value;
-        let status = document.getElementById('statusFilter').value;
-
-        let rows = document.querySelectorAll('#incomeTable tr');
-        rows.forEach(row => {
-            let dept = row.getAttribute('data-department');
-            let docType = row.getAttribute('data-type');
-            let docStatus = row.getAttribute('data-status');
-
-            let show = 
-                (department === 'all' || dept === department) &&
-                (type === 'all' || docType === type) &&
-                (status === 'all' || docStatus === status);
-            
-            row.style.display = show ? '' : 'none';
-        });
+    function openQuotationModal() {
+        document.getElementById("quotationModal").classList.remove("hidden");
     }
-
-    function createDocument() {
-        alert('Create new document functionality coming soon!');
+    function closeQuotationModal() {
+        document.getElementById("quotationModal").classList.add("hidden");
+    }
+    function saveQuotation() {
+        const customer = document.getElementById("customerName").value;
+        const amount = document.getElementById("quotationAmount").value;
+        if (!customer || !amount) {
+            alert("Please fill all fields.");
+            return;
+        }
+        console.log("Saving quotation for", customer, "Amount:", amount);
+        closeQuotationModal();
     }
 </script>
 
