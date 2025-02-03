@@ -1,5 +1,5 @@
 const CONFIG = {
-    SERVER_URL: "https://fc65ac8a876e.ngrok.app"
+    SERVER_URL: "https://27548946878c.ngrok.app"
 };
 
 export default CONFIG;
