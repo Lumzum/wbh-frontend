@@ -1,84 +1,66 @@
-<!-- Updated Income and Expenses Pages with Department Dropdown -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Income & Expenses</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Income - WBH Accounting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="container">
-        <h1>Income & Expenses</h1>
-        
-        <!-- Department Filter -->
-        <label for="departmentFilter">Filter by Department:</label>
-        <select id="departmentFilter">
-            <option value="all">All Departments</option>
-            <option value="Sales">Sales</option>
-            <option value="Finance">Finance</option>
-            <option value="Operations">Operations</option>
-        </select>
-        
-        <!-- Income Section -->
-        <section>
-            <h2>Income</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Quotation ID</th>
-                        <th>Customer</th>
-                        <th>Amount</th>
-                        <th>Department</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="incomeTable">
-                    <!-- Data will be loaded dynamically -->
-                </tbody>
-            </table>
-        </section>
-        
-        <!-- Expenses Section -->
-        <section>
-            <h2>Expenses</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Expense ID</th>
-                        <th>Vendor</th>
-                        <th>Amount</th>
-                        <th>Department</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="expensesTable">
-                    <!-- Data will be loaded dynamically -->
-                </tbody>
-            </table>
-        </section>
-    </div>
+<body class="bg-gray-100">
 
-    <script>
-        document.getElementById('departmentFilter').addEventListener('change', function() {
-            let selectedDepartment = this.value;
-            filterTables(selectedDepartment);
+<!-- Header -->
+<header class="bg-gradient-to-r from-blue-500 to-teal-400 text-white p-4 flex justify-between items-center shadow-md">
+    <h2 class="text-lg font-bold">Income</h2>
+    <button onclick="createDocument()" class="text-white text-3xl font-bold bg-blue-500 hover:bg-blue-600 rounded-full w-10 h-10 flex items-center justify-center">+</button>
+</header>
+
+<!-- Department Filter -->
+<div class="p-4">
+    <label for="departmentFilter" class="block text-gray-700 font-semibold">Filter by Department:</label>
+    <select id="departmentFilter" class="mt-1 p-2 w-full border rounded-md">
+        <option value="all">All Departments</option>
+        <option value="Sales">Sales</option>
+        <option value="Finance">Finance</option>
+        <option value="Operations">Operations</option>
+    </select>
+</div>
+
+<!-- Income Table -->
+<div class="p-4">
+    <table class="min-w-full bg-white shadow-md rounded-md overflow-hidden">
+        <thead class="bg-blue-500 text-white">
+            <tr>
+                <th class="p-3 text-left">Quotation ID</th>
+                <th class="p-3 text-left">Customer</th>
+                <th class="p-3 text-left">Amount</th>
+                <th class="p-3 text-left">Department</th>
+                <th class="p-3 text-left">Status</th>
+            </tr>
+        </thead>
+        <tbody id="incomeTable" class="text-gray-700">
+            <!-- Data will be dynamically loaded here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.getElementById('departmentFilter').addEventListener('change', function() {
+        let selectedDepartment = this.value;
+        filterTable(selectedDepartment);
+    });
+
+    function filterTable(department) {
+        let rows = document.querySelectorAll('#incomeTable tr');
+        rows.forEach(row => {
+            let dept = row.getAttribute('data-department');
+            row.style.display = (department === 'all' || dept === department) ? '' : 'none';
         });
-        
-        function filterTables(department) {
-            let incomeRows = document.querySelectorAll('#incomeTable tr');
-            let expenseRows = document.querySelectorAll('#expensesTable tr');
-            
-            incomeRows.forEach(row => {
-                let dept = row.getAttribute('data-department');
-                row.style.display = (department === 'all' || dept === department) ? '' : 'none';
-            });
-            
-            expenseRows.forEach(row => {
-                let dept = row.getAttribute('data-department');
-                row.style.display = (department === 'all' || dept === department) ? '' : 'none';
-            });
-        }
-    </script>
+    }
+
+    function createDocument() {
+        alert('Create new document functionality coming soon!');
+    }
+</script>
+
 </body>
 </html>
