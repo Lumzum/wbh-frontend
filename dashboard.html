@@ -11,17 +11,20 @@
 <!-- Redirect if user is not logged in -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const username = sessionStorage.getItem("username");
-        const company = sessionStorage.getItem("company");
+    const username = sessionStorage.getItem("username");
+    const company = sessionStorage.getItem("company");
 
-        if (!username || !company) {
-            window.location.href = "index.html"; // Redirect to login page
-        } else {
-            document.getElementById("company-name").innerText = "WIN BORN HOLDING";
-            document.getElementById("company-label").innerText = company;
-            document.getElementById("user-name").innerText = username;
-        }
-    });
+    if (!username || !company) {
+        console.log("🚨 No session data found! Redirecting to login...");
+        window.location.href = "index.html"; // Redirect if not logged in
+    } else {
+        console.log("✅ Session found! User:", username, "Company:", company);
+        document.getElementById("company-name").innerText = "WIN BORN HOLDING";
+        document.getElementById("company-label").innerText = company;
+        document.getElementById("user-name").innerText = username;
+    }
+});
+
 
     function logout() {
         sessionStorage.clear();

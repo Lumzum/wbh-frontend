@@ -37,7 +37,7 @@
             const company = document.getElementById("companySelect").value;
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
-
+    
             if (!company) {
                 alert("Please select a company");
                 return;
@@ -46,7 +46,7 @@
                 alert("Please enter your username and password");
                 return;
             }
-
+    
             fetch(`${window.SERVER_URL}/api/login`, { // Uses dynamic backend URL
                 method: "POST",
                 headers: {
@@ -57,8 +57,12 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    // ✅ Save user session data
+                    sessionStorage.setItem("username", data.user.username);
+                    sessionStorage.setItem("company", data.user.company);
+    
                     alert("Login successful!");
-                    window.location.href = "dashboard.html";
+                    window.location.href = "dashboard.html"; // Redirect to dashboard
                 } else {
                     alert(data.message);
                 }
@@ -66,5 +70,6 @@
             .catch(error => console.error("Login error:", error));
         }
     </script>
+    
 </body>
 </html>
