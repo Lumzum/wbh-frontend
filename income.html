@@ -11,40 +11,35 @@
 <!-- Navbar & Header -->
 <script src="navbar.js"></script>
 
-<!-- Header -->
-<header class="bg-gradient-to-r from-blue-500 to-teal-400 text-white p-4 flex justify-between items-center shadow-md">
-    <div class="flex flex-col">
-        <h1 class="text-3xl font-bold">Income</h1>
-        <label for="departmentFilter" class="text-gray-100 text-lg mt-1">Select Department:</label>
+<!-- Filters & Add Document Button -->
+<div class="p-4 bg-white shadow-md rounded-md flex flex-wrap gap-4 items-center justify-between">
+    <div class="flex gap-4">
+        <div>
+            <label for="departmentFilter" class="block text-gray-700 font-semibold">Select Department:</label>
+            <select id="departmentFilter" class="mt-1 p-2 w-48 border rounded-md">
+                <option value="all">All Departments</option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="typeFilter" class="block text-gray-700 font-semibold">Type:</label>
+            <select id="typeFilter" class="mt-1 p-2 w-48 border rounded-md">
+                <option value="all">All</option>
+                <option value="quotation">Quotations</option>
+                <option value="invoice">Invoices</option>
+            </select>
+        </div>
+        
+        <div>
+            <label for="statusFilter" class="block text-gray-700 font-semibold">Status:</label>
+            <select id="statusFilter" class="mt-1 p-2 w-48 border rounded-md">
+                <option value="all">All</option>
+                <option value="paid">Paid</option>
+                <option value="unpaid">Unpaid</option>
+            </select>
+        </div>
     </div>
-    <button onclick="openQuotationModal()" class="text-white text-3xl font-bold bg-blue-500 hover:bg-blue-600 rounded-full w-12 h-12 flex items-center justify-center fixed bottom-10 right-10 shadow-lg">+</button>
-</header>
-
-<!-- Filters -->
-<div class="p-4 bg-white shadow-md rounded-md flex flex-wrap gap-4 items-center">
-    <div>
-        <select id="departmentFilter" class="mt-1 p-2 w-48 border rounded-md">
-            <option value="all">All Departments</option>
-        </select>
-    </div>
-    
-    <div>
-        <label for="typeFilter" class="block text-gray-700 font-semibold">Type:</label>
-        <select id="typeFilter" class="mt-1 p-2 w-48 border rounded-md">
-            <option value="all">All</option>
-            <option value="quotation">Quotations</option>
-            <option value="invoice">Invoices</option>
-        </select>
-    </div>
-    
-    <div>
-        <label for="statusFilter" class="block text-gray-700 font-semibold">Status:</label>
-        <select id="statusFilter" class="mt-1 p-2 w-48 border rounded-md">
-            <option value="all">All</option>
-            <option value="paid">Paid</option>
-            <option value="unpaid">Unpaid</option>
-        </select>
-    </div>
+    <button onclick="openQuotationModal()" class="text-white text-3xl font-bold bg-blue-500 hover:bg-blue-600 rounded-full w-12 h-12 flex items-center justify-center shadow-lg">+</button>
 </div>
 
 <!-- Income Table -->
