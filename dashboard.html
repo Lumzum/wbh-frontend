@@ -61,15 +61,15 @@
 <!-- Navigation Menu -->
 <nav class="bg-white shadow-md p-3 flex justify-center">
   <ul class="flex space-x-4 text-gray-700 font-medium">
-      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">🏠 Dashboard</a></li>
-      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">💰 Income</a></li>
-      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">💸 Expenses</a></li>
-      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">📇 Contacts</a></li>
-      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">📦 Products</a></li>
-      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">💰 Finances</a></li>
-      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">🏦 Accounts</a></li>
-      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">📂 File Vault</a></li>
-      <li><a href="#" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">⚙ Settings</a></li>
+      <li><a href="dashboard.html" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">🏠 Dashboard</a></li>
+      <li><a href="income.html" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">💰 Income</a></li>
+      <li><a href="expenses.html" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">💸 Expenses</a></li>
+      <li><a href="contacts.html" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">📇 Contacts</a></li>
+      <li><a href="products.html" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">📦 Products</a></li>
+      <li><a href="finances.html" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">💰 Finances</a></li>
+      <li><a href="accounts.html" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">🏦 Accounts</a></li>
+      <li><a href="filevault.html" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">📂 File Vault</a></li>
+      <li><a href="settings.html" class="px-4 py-2 bg-gray-100 hover:bg-blue-500 hover:text-white rounded-xl">⚙ Settings</a></li>
   </ul>
 </nav>
 
@@ -77,55 +77,6 @@
 <main class="p-6">
     <h1 class="text-2xl font-bold text-gray-800">Overview</h1>
 </main>
-
-<script>
-    const translations = {
-        en: {
-            companyName: "WIN BORN HOLDING",
-            dashboard: "Dashboard",
-            income: "Income",
-            expenses: "Expenses",
-            contacts: "Contacts",
-            products: "Products",
-            finances: "Finances",
-            accounts: "Accounts",
-            fileVault: "File Vault",
-            settings: "Settings",
-            userName: "User"
-        },
-        th: {
-            companyName: "วิน บอร์น โฮลดิ้ง",
-            dashboard: "แดชบอร์ด",
-            income: "รายรับ",
-            expenses: "ค่าใช้จ่าย",
-            contacts: "ผู้ติดต่อ",
-            products: "สินค้า",
-            finances: "การเงิน",
-            accounts: "บัญชี",
-            fileVault: "คลังไฟล์",
-            settings: "ตั้งค่า",
-            userName: "ผู้ใช้"
-        }
-    };
-
-    let currentLang = "en";
-
-    function toggleLanguage() {
-        currentLang = currentLang === "en" ? "th" : "en";
-
-        document.getElementById("lang-btn").innerText = currentLang === "en" ? "🇺🇸 EN" : "🇹🇭 TH";
-        document.getElementById("menu-dashboard").innerText = "🏠 " + translations[currentLang].dashboard;
-        document.getElementById("menu-income").innerText = "💰 " + translations[currentLang].income;
-        document.getElementById("menu-expenses").innerText = "💸 " + translations[currentLang].expenses;
-        document.getElementById("menu-contacts").innerText = "📇 " + translations[currentLang].contacts;
-        document.getElementById("menu-products").innerText = "📦 " + translations[currentLang].products;
-        document.getElementById("menu-finances").innerText = "💰 " + translations[currentLang].finances;
-        document.getElementById("menu-accounts").innerText = "🏦 " + translations[currentLang].accounts;
-        document.getElementById("menu-filevault").innerText = "📂 " + translations[currentLang].fileVault;
-        document.getElementById("menu-settings").innerText = "⚙ " + translations[currentLang].settings;
-        document.getElementById("user-name").innerText = translations[currentLang].userName;
-    }
-</script>
 
 </body>
 </html>
